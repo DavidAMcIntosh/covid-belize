@@ -1,0 +1,21 @@
+mat-card {
+    box-shadow: none !important;
+    border-radius: 0;
+}
+
+.mat-card-title {
+    font-size: 32px;
+}
+
+.mat-list-base .mat-list-item {
+    font-size: 24px;
+}
+
+#btmFooter {
+    align-self: flex-end;
+  }
+
+  footer {
+    border-top: 1px solid #bbb;
+    text-align: center;
+  }
