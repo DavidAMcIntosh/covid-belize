@@ -1,72 +1,124 @@
-<mat-toolbar color="primary"><span>{{title}}</span>
-</mat-toolbar>
 <ng-scrollbar visibility="always">
+  <mat-toolbar color="primary"><span>{{title}}</span>
+  </mat-toolbar>
   <mat-tab-group mat-align-tabs="center">
     <mat-tab label="Information">
-      <div fxLayout="row wrap" fxLayoutGap="0px" fxLayoutAlign="flex-start">
-        <mat-card fxFlex="0 1 50%">
-          <mat-card-title>
-            Real-time Data
-          </mat-card-title>
-          <mat-card-content>
-            <mat-list>
-              <mat-list-item>
-                Reported Cases: {{cases}}
-              </mat-list-item>
-              <mat-list-item>
-                Active Cases: {{active}}
-              </mat-list-item>
-              <mat-list-item>
-                Critical Cases: {{critical}}
-              </mat-list-item>
-              <mat-list-item>
-                Deaths: {{deaths}}
-              </mat-list-item>
-              <mat-list-item>
-                Recoveries: {{recoveries}}
-              </mat-list-item>
-              <mat-list-item>
-                Cases Today: {{todayCases}}
-              </mat-list-item>
-              <mat-list-item>
-                Deaths Today: {{todayDeaths}}
-              </mat-list-item>
-              <mat-list-item>
-                Tests Performed: {{tests}}
-              </mat-list-item>
-              <mat-list-item> The Last Case Was Reported: {{daysSinceLastCase}}</mat-list-item>
-              <mat-list-item> The Last Death Was Reported: {{daysSinceLastDeath}}</mat-list-item>
-            </mat-list>
-          </mat-card-content>
-        </mat-card>
-        <mat-card fxFlex="0 1 50%">
-          <mat-card-title>Data Projections</mat-card-title>
-          <mat-list>
-            <mat-list-item>
-              Cases Per One Million People: {{casesPerOneMillion}}
-            </mat-list-item>
-            <mat-list-item>
-              Deaths Per One Million People: {{deathsPerOneMillion}}
-            </mat-list-item>
-            <mat-list-item>
-              Tests Per One Million People: {{testsPerOneMillion}}
-            </mat-list-item>
-          </mat-list>
-          <mat-list>
-            <mat-list-item>
-              <mat-card-title>Global Data</mat-card-title>
-            </mat-list-item>
-            <mat-list-item>
-              Total Confirmed: {{totalConfirmed}}
-            </mat-list-item>
-            <mat-list-item>
-              Total Deaths: {{totalDeaths}}
-            </mat-list-item>
-            <mat-list-item>
-              Total Recovered: {{totalRecovered}}
-            </mat-list-item>
-          </mat-list>
-        </mat-card>
+      <div class="container">
+        <div class="flex-container" fxLayoutGap="0px" fxLayout="row" fxLayout.lt-md="column">
+          <mat-card fxFlex="50" fxFlexAlign="center">
+            <mat-card-title heading>
+              Real-time Data
+            </mat-card-title>
+            <mat-card-content>
+              <mat-list>
+                <mat-list-item>
+                  <p body-1>
+                    Reported Cases: {{cases}}
+                  </p>
+                </mat-list-item>
+                <mat-list-item>
+                  <p body-1>
+                    Active Cases: {{active}}
+                  </p>
+                </mat-list-item>
+                <mat-list-item>
+                  <p body-1>
+                    Critical Cases: {{critical}}
+                  </p>
+                </mat-list-item>
+                <mat-list-item>
+                  <p body-1>
+                    Deaths: {{deaths}}
+                  </p>
+                </mat-list-item>
+                <mat-list-item>
+                  <p body-1>
+                    Recoveries: {{recoveries}}
+                  </p>
+                </mat-list-item>
+                <mat-list-item>
+                  <p body-1>
+                    Cases Today: {{todayCases}}
+                  </p>
+                </mat-list-item>
+                <mat-list-item>
+                  <p body-1>
+                    Deaths Today: {{todayDeaths}}
+                  </p>
+                </mat-list-item>
+                <mat-list-item>
+                  <p body-1>
+                    Tests Performed: {{tests}}
+                  </p>
+                </mat-list-item>
+                <mat-list-item>
+                  <p body-1> Last Case: {{daysSinceLastCase}}</p>
+                </mat-list-item>
+                <mat-list-item>
+                  <p body-1> Last Death: {{daysSinceLastDeath}}</p>
+                </mat-list-item>
+              </mat-list>
+            </mat-card-content>
+          </mat-card>
+          <mat-card fxFlex="50">
+            <mat-card-title heading>Data Projections</mat-card-title>
+            <mat-card-content>
+              <mat-list>
+                <mat-list-item>
+                  <p body-1>
+                    Cases Per One Million People: {{casesPerOneMillion}}
+                  </p>
+                </mat-list-item>
+                <mat-list-item>
+                  <p body-1>
+                    Deaths Per One Million People: {{deathsPerOneMillion}}
+                  </p>
+                </mat-list-item>
+                <mat-list-item>
+                  <p body-1>
+                    Tests Per One Million People: {{testsPerOneMillion}}
+                  </p>
+                </mat-list-item>
+              </mat-list>
+              <mat-list>
+                <mat-list-item>
+                  <p body-1>
+                    Total Confirmed: {{totalConfirmed}}
+                  </p>
+                </mat-list-item>
+                <mat-list-item>
+                  <p body-1>
+                    Total Deaths: {{totalDeaths}}
+                  </p>
+                </mat-list-item>
+                <mat-list-item>
+                  <p body-1>
+                    Total Recovered: {{totalRecovered}}
+                  </p>
+                </mat-list-item>
+              </mat-list>
+              <mat-card-title heading>Global Data</mat-card-title>
+
+                <mat-list>
+                  <mat-list-item>
+                    <p body-1>
+                      Total Confirmed: {{totalConfirmed}}
+                    </p>
+                  </mat-list-item>
+                  <mat-list-item>
+                    <p body-1>
+                      Total Deaths: {{totalDeaths}}
+                    </p>
+                  </mat-list-item>
+                  <mat-list-item>
+                    <p body-1>
+                      Total Recovered: {{totalRecovered}}
+                    </p>
+                  </mat-list-item>
+                </mat-list>
+            </mat-card-content>
+          </mat-card>
+        </div>
       </div>
     </mat-tab>
     <mat-tab label="Timeline">
