@@ -1,5 +1,6 @@
 <ng-scrollbar visibility="always">
-  <mat-toolbar color="primary"><span>{{title}}</span>
+  <mat-toolbar color="primary">
+    <mat-toolbar-row><span class="center-span">{{title}}</span></mat-toolbar-row>
   </mat-toolbar>
   <mat-tab-group mat-align-tabs="center">
     <mat-tab label="Information">
@@ -99,23 +100,23 @@
               </mat-list>
               <mat-card-title heading>Global Data</mat-card-title>
 
-                <mat-list>
-                  <mat-list-item>
-                    <p body-1>
-                      Total Confirmed: {{totalConfirmed}}
-                    </p>
-                  </mat-list-item>
-                  <mat-list-item>
-                    <p body-1>
-                      Total Deaths: {{totalDeaths}}
-                    </p>
-                  </mat-list-item>
-                  <mat-list-item>
-                    <p body-1>
-                      Total Recovered: {{totalRecovered}}
-                    </p>
-                  </mat-list-item>
-                </mat-list>
+              <mat-list>
+                <mat-list-item>
+                  <p body-1>
+                    Total Confirmed: {{totalConfirmed}}
+                  </p>
+                </mat-list-item>
+                <mat-list-item>
+                  <p body-1>
+                    Total Deaths: {{totalDeaths}}
+                  </p>
+                </mat-list-item>
+                <mat-list-item>
+                  <p body-1>
+                    Total Recovered: {{totalRecovered}}
+                  </p>
+                </mat-list-item>
+              </mat-list>
             </mat-card-content>
           </mat-card>
         </div>

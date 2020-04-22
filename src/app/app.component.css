@@ -2,3 +2,8 @@ mat-card {
     box-shadow: none !important;
     border-radius: 0;
 }
+
+.center-span {
+    flex: 1 1 auto;
+    text-align: center;
+}
