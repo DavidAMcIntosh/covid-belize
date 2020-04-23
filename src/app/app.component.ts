@@ -3,6 +3,7 @@ import { CovidDataService } from './covid-data.service';
 import { TimelineElement } from './timeline.interface';
 import { Covid19ApiResponse, CoronaApiResponse, WorldApiResponse } from './apis.interface';
 import * as moment from 'moment';
+import { NgProgress, NgProgressRef } from 'ngx-progressbar';
 
 @Component({
   selector: 'app-root',
@@ -30,100 +31,144 @@ export class AppComponent {
 
   //timeline
   timelineElements: Array<TimelineElement> = [];
-  covid19Response: Array<Covid19ApiResponse> = [];
+  timelineData: Array<Covid19ApiResponse> = [];
 
-  constructor(private covidService: CovidDataService) { }
+  //loading
+  loading: boolean = true;
+
+  options = {
+    min: 8,
+    max: 100,
+    ease: 'linear',
+    speed: 200,
+    trickleSpeed: 300,
+    meteor: true,
+    spinner: true,
+    spinnerPosition: 'right',
+    direction: 'ltr+',
+    color: '#80cbc4',
+    thick: false
+  };
+
+  startedClass = false;
+  completedClass = false;
+  preventAbuse = false;
+  progressRef: NgProgressRef;
+
+  constructor(private covidService: CovidDataService, private progress: NgProgress) { }
 
   ngOnInit() {
-    this.getCovid19Data();
-    this.getCoronaData();
-    this.getWorldData();
+    this.progressRef = this.progress.ref('myProgress');
+    this.progressRef.start();
+    this.loadData();
   }
 
-  getCovid19Data() {
-    this.covidService.getCovid19Data()
-      .then((data: Array<Covid19ApiResponse>) => {
-        this.covid19Response = data;
-        let lastIndex = data.length - 1;
-        this.cases = data[lastIndex].Confirmed;
-        this.deaths = data[lastIndex].Deaths;
-        this.recoveries = data[lastIndex].Recovered;
+  startLoading() {
+    this.progressRef.start();
+  }
+
+  completeLoading() {
+    this.progressRef.complete();
+  }
+
+  changeProgressColor() {
+    this.progressRef.setConfig({ color: 'green' });
+  }
+
+  async loadData() {
+    let covid19Response: Array<Covid19ApiResponse> = await this.getCovid19Data();
+    if (covid19Response) {
+      this.timelineData = covid19Response;
+      let lastIndex = covid19Response.length - 1;
+        this.cases = covid19Response[lastIndex].Confirmed;
+        this.deaths = covid19Response[lastIndex].Deaths;
+        this.recoveries = covid19Response[lastIndex].Recovered;
 
         let lastCase: string = '';
         let lastDeath: string = '';
 
-        for (let i = data.length - 1; i >= 0; i--) {
-          if (data[i].Confirmed < this.cases) {
-            lastCase = data[i].Date;
+        for (let i = covid19Response.length - 1; i >= 0; i--) {
+          if (covid19Response[i].Confirmed < this.cases) {
+            lastCase = covid19Response[i].Date;
             break;
           }
         }
-        for (let i = data.length - 1; i >= 0; i--) {
-          if (data[i].Deaths < this.deaths) {
-            lastDeath = data[i].Date;
+        for (let i = covid19Response.length - 1; i >= 0; i--) {
+          if (covid19Response[i].Deaths < this.deaths) {
+            lastDeath = covid19Response[i].Date;
             break;
           }
         }
         this.daysSinceLastCase = moment(lastCase).from(moment());
         this.daysSinceLastDeath = moment(lastDeath).from(moment());
-        this.prepareTimeline();
-      });
+        let coronaResponse: CoronaApiResponse = await this.getCoronaData();
+        if (coronaResponse) {
+          this.active = coronaResponse.active;
+          this.critical = coronaResponse.critical;
+          this.tests = coronaResponse.tests;
+          this.casesPerOneMillion = coronaResponse.casesPerOneMillion;
+          this.deathsPerOneMillion = coronaResponse.deathsPerOneMillion;
+          this.testsPerOneMillion = coronaResponse.testsPerOneMillion;
+          this.todayCases = coronaResponse.todayCases;
+          this.todayDeaths = coronaResponse.todayDeaths;
+
+          let worldResponse: WorldApiResponse = await this.getWorldData();
+          if (worldResponse) {
+            this.totalConfirmed = worldResponse.TotalConfirmed;
+            this.totalDeaths= worldResponse.TotalDeaths;
+            this.totalRecovered= worldResponse.TotalRecovered;
+            this.prepareTimeline();
+            this.progressRef.complete();
+            this.loading = false;
+          }
+        }
+    }
   }
 
-  getCoronaData() {
-    this.covidService.getCoronaData()
-      .then((data: CoronaApiResponse) => {
-        this.active = data.active;
-        this.critical = data.critical;
-        this.tests = data.tests;
-        this.casesPerOneMillion = data.casesPerOneMillion;
-        this.deathsPerOneMillion = data.deathsPerOneMillion;
-        this.testsPerOneMillion = data.testsPerOneMillion;
-        this.todayCases = data.todayCases;
-        this.todayDeaths = data.todayDeaths;
-      });
+  getCovid19Data(): Promise<any> {
+    return this.covidService.getCovid19Data();
   }
 
-  getWorldData() {
-    this.covidService.getWorldData()
-    .then((data: WorldApiResponse) => {
-      this.totalConfirmed = data.TotalConfirmed;
-      this.totalDeaths= data.TotalDeaths;
-      this.totalRecovered= data.TotalRecovered;
-    });
+  getCoronaData(): Promise<any> {
+    return this.covidService.getCoronaData();
+  }
+
+  getWorldData(): Promise<any> {
+    return this.covidService.getWorldData();
   }
 
   prepareTimeline() {
     let confirmed = 0;
     let deaths = 0;
     let recoveries = 0;
-    for(let i=0; i < this.covid19Response.length; i++) {
+    for(let i=0; i < this.timelineData.length; i++) {
       let isConfirmedChange: boolean = false;;
       let isDeathsChange: boolean = false;
       let isRecoveriesChange: boolean = false;
-      if(this.covid19Response[i].Confirmed > confirmed) {
+      if(this.timelineData[i].Confirmed > confirmed) {
         isConfirmedChange = true;
       }
-      if(this.covid19Response[i].Deaths > deaths) {
+      if(this.timelineData[i].Deaths > deaths) {
         isDeathsChange = true;
       }
-      if(this.covid19Response[i].Recovered > recoveries) {
+      if(this.timelineData[i].Recovered > recoveries) {
         isRecoveriesChange = true;
       }
       if(isConfirmedChange || isDeathsChange || isRecoveriesChange) {
         this.timelineElements.push({
-          date: new Date(moment(this.covid19Response[i].Date).format('YYYY-MM-DD')),
-          newCases: (this.covid19Response[i].Confirmed - confirmed),
-          newDeaths: (this.covid19Response[i].Deaths - deaths),
-          newRecovered: (this.covid19Response[i].Recovered - recoveries),
+          date: new Date(moment(this.timelineData[i].Date).format('YYYY-MM-DD')),
+          newCases: (this.timelineData[i].Confirmed - confirmed),
+          newDeaths: (this.timelineData[i].Deaths - deaths),
+          newRecovered: (this.timelineData[i].Recovered - recoveries),
           newCase: isConfirmedChange,
           newDeath: isDeathsChange,
           newRecovery: isRecoveriesChange
         });
-        confirmed = this.covid19Response[i].Confirmed;
-        deaths = this.covid19Response[i].Deaths;
-        recoveries = this.covid19Response[i].Recovered;
+        confirmed = this.timelineData[i].Confirmed;
+        deaths = this.timelineData[i].Deaths;
+        recoveries = this.timelineData[i].Recovered;
       }
     }
   }
+
 }

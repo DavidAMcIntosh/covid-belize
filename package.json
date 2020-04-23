@@ -24,6 +24,7 @@
     "@angular/router": "~9.1.1",
     "angular-vertical-timeline": "^0.6.0",
     "moment": "^2.24.0",
+    "ngx-progressbar": "^6.0.2",
     "ngx-scrollbar": "^7.2.1-beta.0",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",

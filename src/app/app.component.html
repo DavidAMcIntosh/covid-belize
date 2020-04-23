@@ -4,7 +4,14 @@
   </mat-toolbar>
   <mat-tab-group mat-align-tabs="center">
     <mat-tab label="Information">
-      <div class="container">
+      
+      <div class="grid" *ngIf="loading">
+        <div class="panel">
+          <ng-progress [color]="'red'" [fixed]="false" id="myProgress"></ng-progress>
+        </div>
+      </div>
+
+      <div class="container" *ngIf="!loading">
         <div class="flex-container" fxLayoutGap="0px" fxLayout="row" fxLayout.lt-md="column">
           <mat-card fxFlex="50">
             <mat-card-title heading>
@@ -126,7 +133,7 @@
       <!-- Add the timeline -->
       <vertical-timeline>
         <!-- If no value is passed for the date, the current time is used. -->
-        <vertical-timeline-card [dateValue]="timelineElement.date" [timeString]="'0:00'"
+        <vertical-timeline-card [dateValue]="timelineElement.date" [timeString]="' '"
           *ngFor="let timelineElement of timelineElements">
           <h1 *ngIf="timelineElement.newCase">+{{timelineElement.newCases}} New Cases</h1>
           <h1 *ngIf="timelineElement.newDeaths">+{{timelineElement.newDeaths}} New Deaths</h1>
