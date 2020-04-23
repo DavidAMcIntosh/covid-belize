@@ -7,7 +7,6 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
 import { MatTabsModule } from '@angular/material/tabs';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatTooltipModule } from '@angular/material/tooltip'
 
 // for http web service calls
 import { HttpClientModule } from '@angular/common/http';
@@ -21,6 +20,9 @@ import { VerticalTimelineModule } from 'angular-vertical-timeline';
 
 // Custom scroll
 import { NgScrollbarModule } from 'ngx-scrollbar';
+
+// Custom progress bar
+import { NgProgressModule } from 'ngx-progressbar';
 
 @NgModule({
   declarations: [
@@ -37,6 +39,7 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
     VerticalTimelineModule,
     FlexLayoutModule,
     NgScrollbarModule,
+    NgProgressModule
   ],
   providers: [CovidDataService],
   bootstrap: [AppComponent]
