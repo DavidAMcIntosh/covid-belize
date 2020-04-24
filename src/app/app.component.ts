@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CovidDataService } from './covid-data.service';
 import { TimelineElement } from './timeline.interface';
-import { Covid19ApiResponse, CoronaApiResponse, WorldApiResponse } from './apis.interface';
+import { Covid19ApiResponse, CoronaApiResponse, WorldApiResponse, BbcNewsApiResponse, Article } from './apis.interface';
 import * as moment from 'moment';
 import { NgProgress, NgProgressRef } from 'ngx-progressbar';
 
@@ -35,6 +35,9 @@ export class AppComponent {
 
   //loading
   loading: boolean = true;
+
+  //news
+  newsToDisplay: Article = <Article>{};
 
   options = {
     min: 8,
@@ -115,14 +118,24 @@ export class AppComponent {
           let worldResponse: WorldApiResponse = await this.getWorldData();
           if (worldResponse) {
             this.totalConfirmed = worldResponse.TotalConfirmed;
-            this.totalDeaths= worldResponse.TotalDeaths;
-            this.totalRecovered= worldResponse.TotalRecovered;
-            this.prepareTimeline();
-            this.progressRef.complete();
-            this.loading = false;
+            this.totalDeaths = worldResponse.TotalDeaths;
+            this.totalRecovered = worldResponse.TotalRecovered;
+          
+            let bbcNewsResponse: BbcNewsApiResponse = await this.getBbcNewsData();
+            if (bbcNewsResponse) {
+              let newsIndex = Math.floor(Math.random() * (19 - 0 + 1) + 0);
+              this.newsToDisplay = bbcNewsResponse.articles[newsIndex];
+              this.prepareTimeline();
+              this.progressRef.complete();
+              this.loading = false;
+            }
           }
         }
     }
+  }
+
+  getBbcNewsData(): Promise<any> {
+    return this.covidService.getBbcNewsData();
   }
 
   getCovid19Data(): Promise<any> {

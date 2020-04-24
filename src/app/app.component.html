@@ -1,21 +1,15 @@
 <ng-scrollbar visibility="always">
+  <ng-progress [color]="'black'" id="myProgress"></ng-progress>
   <mat-toolbar color="primary">
     <mat-toolbar-row><span class="center-span">{{title}}</span></mat-toolbar-row>
   </mat-toolbar>
   <mat-tab-group mat-align-tabs="center">
     <mat-tab label="Information">
-      
-      <div class="grid" *ngIf="loading">
-        <div class="panel">
-          <ng-progress [color]="'#80cbc4'" [fixed]="false" id="myProgress"></ng-progress>
-        </div>
-      </div>
-
       <div class="container" *ngIf="!loading">
         <div class="flex-container" fxLayoutGap="0px" fxLayout="row" fxLayout.lt-md="column">
-          <mat-card fxFlex="50">
+          <mat-card class="main-cards" fxFlex="25">
             <mat-card-title heading>
-              Real-time Data
+              Latest Updates (Belize)
             </mat-card-title>
             <mat-card-content>
               <mat-list>
@@ -68,8 +62,8 @@
               </mat-list>
             </mat-card-content>
           </mat-card>
-          <mat-card fxFlex="50">
-            <mat-card-title heading>Data Projections</mat-card-title>
+          <mat-card class="main-cards" fxFlex="25">
+            <mat-card-title heading>Data Projections (Belize)</mat-card-title>
             <mat-card-content>
               <mat-list>
                 <mat-list-item>
@@ -88,6 +82,8 @@
                   </p>
                 </mat-list-item>
               </mat-list>
+              <br>
+              <mat-card-title heading>Global Stats</mat-card-title>
               <mat-list>
                 <mat-list-item>
                   <p body-1>
@@ -105,25 +101,26 @@
                   </p>
                 </mat-list-item>
               </mat-list>
-              <mat-card-title heading>Global Data</mat-card-title>
-
-              <mat-list>
-                <mat-list-item>
-                  <p body-1>
-                    Total Confirmed: {{totalConfirmed}}
-                  </p>
-                </mat-list-item>
-                <mat-list-item>
-                  <p body-1>
-                    Total Deaths: {{totalDeaths}}
-                  </p>
-                </mat-list-item>
-                <mat-list-item>
-                  <p body-1>
-                    Total Recovered: {{totalRecovered}}
-                  </p>
-                </mat-list-item>
-              </mat-list>
+            </mat-card-content>
+          </mat-card>
+          <mat-divider [vertical]="true"></mat-divider>
+          <mat-card class="main-cards" fxFlex="50">
+            <mat-card-content>
+                <mat-card class="news-card mat-elevation-z8" fxFlex="50">
+                  <mat-card-header>
+                    <mat-card-title>{{newsToDisplay.title}}</mat-card-title>
+                    <mat-card-subtitle>{{newsToDisplay.author}}</mat-card-subtitle>
+                  </mat-card-header>
+                  <img mat-card-image src={{newsToDisplay.urlToImage}}>
+                  <mat-card-content>
+                    <p>
+                      {{newsToDisplay.description}}
+                    </p>
+                  </mat-card-content>
+                  <mat-card-actions>
+                    <a mat-button href="{{newsToDisplay.url}}" target="_blank">READ MORE</a>
+                  </mat-card-actions>
+                </mat-card>
             </mat-card-content>
           </mat-card>
         </div>
