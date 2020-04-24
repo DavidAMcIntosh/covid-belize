@@ -15,49 +15,49 @@
               <mat-list>
                 <mat-list-item>
                   <p body-1>
-                    Reported Cases: {{cases}}
+                    Reported Cases: {{numberWithCommas(cases)}}
                   </p>
                 </mat-list-item>
                 <mat-list-item>
                   <p body-1>
-                    Active Cases: {{active}}
+                    Active Cases: {{numberWithCommas(active)}}
                   </p>
                 </mat-list-item>
                 <mat-list-item>
                   <p body-1>
-                    Critical Cases: {{critical}}
+                    Critical Cases: {{numberWithCommas(critical)}}
                   </p>
                 </mat-list-item>
                 <mat-list-item>
                   <p body-1>
-                    Deaths: {{deaths}}
+                    Deaths: {{numberWithCommas(deaths)}}
                   </p>
                 </mat-list-item>
                 <mat-list-item>
                   <p body-1>
-                    Recoveries: {{recoveries}}
+                    Recoveries: {{numberWithCommas(recoveries)}}
                   </p>
                 </mat-list-item>
                 <mat-list-item>
                   <p body-1>
-                    Cases Today: {{todayCases}}
+                    Cases Today: {{numberWithCommas(todayCases)}}
                   </p>
                 </mat-list-item>
                 <mat-list-item>
                   <p body-1>
-                    Deaths Today: {{todayDeaths}}
+                    Deaths Today: {{numberWithCommas(todayDeaths)}}
                   </p>
                 </mat-list-item>
                 <mat-list-item>
                   <p body-1>
-                    Tests Performed: {{tests}}
+                    Tests Performed: {{numberWithCommas(tests)}}
                   </p>
                 </mat-list-item>
                 <mat-list-item>
-                  <p body-1> Last Case: {{daysSinceLastCase}}</p>
+                  <p body-1> Last Case: {{numberWithCommas(daysSinceLastCase)}}</p>
                 </mat-list-item>
                 <mat-list-item>
-                  <p body-1> Last Death: {{daysSinceLastDeath}}</p>
+                  <p body-1> Last Death: {{numberWithCommas(daysSinceLastDeath)}}</p>
                 </mat-list-item>
               </mat-list>
             </mat-card-content>
@@ -68,17 +68,17 @@
               <mat-list>
                 <mat-list-item>
                   <p body-1>
-                    Cases Per One Million People: {{casesPerOneMillion}}
+                    Cases Per One Million People: {{numberWithCommas(casesPerOneMillion)}}
                   </p>
                 </mat-list-item>
                 <mat-list-item>
                   <p body-1>
-                    Deaths Per One Million People: {{deathsPerOneMillion}}
+                    Deaths Per One Million People: {{numberWithCommas(deathsPerOneMillion)}}
                   </p>
                 </mat-list-item>
                 <mat-list-item>
                   <p body-1>
-                    Tests Per One Million People: {{testsPerOneMillion}}
+                    Tests Per One Million People: {{numberWithCommas(testsPerOneMillion)}}
                   </p>
                 </mat-list-item>
               </mat-list>
@@ -87,17 +87,17 @@
               <mat-list>
                 <mat-list-item>
                   <p body-1>
-                    Total Confirmed: {{totalConfirmed}}
+                    Total Confirmed: {{numberWithCommas(totalConfirmed)}}
                   </p>
                 </mat-list-item>
                 <mat-list-item>
                   <p body-1>
-                    Total Deaths: {{totalDeaths}}
+                    Total Deaths: {{numberWithCommas(totalDeaths)}}
                   </p>
                 </mat-list-item>
                 <mat-list-item>
                   <p body-1>
-                    Total Recovered: {{totalRecovered}}
+                    Total Recovered: {{numberWithCommas(totalRecovered)}}
                   </p>
                 </mat-list-item>
               </mat-list>
