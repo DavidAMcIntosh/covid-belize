@@ -43,3 +43,37 @@ export class WorldApiResponse {
     TotalDeaths: number;
     TotalRecovered: number;
 }
+
+export class BbcNewsApiResponse {
+    status: string;
+    totalResults: number;
+    articles: [
+        {
+            source: {
+                id: string;
+                name: string;
+            }
+            author: string;
+            title: string;
+            description: string;
+            url: string;
+            urlToImage: string;
+            publishedAt: string;
+            content: string
+        }
+    ]
+};
+
+export class Article {
+    source: {
+        id: string;
+        name: string;
+    }
+    author: string;
+    title: string;
+    description: string;
+    url: string;
+    urlToImage: string;
+    publishedAt: string;
+    content: string
+}
