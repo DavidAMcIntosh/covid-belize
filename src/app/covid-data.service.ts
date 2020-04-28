@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../environments/environment';
 import * as moment from 'moment';
 
 @Injectable({
@@ -9,9 +8,8 @@ import * as moment from 'moment';
 export class CovidDataService {
 
   covid19Url = 'https://api.covid19api.com/country/belize?from=2020-01-22T00:00:00Z&to=';
-  coronaUrl = 'https://corona.lmao.ninja/v2/countries/Belize';
+  coronaUrl = 'https://corona.lmao.ninja/v2/countries';
   worldUrl = 'https://api.covid19api.com/world/total';
-  bbcNewsUrl = 'https://newsapi.org/v2/everything?sources=bbc-news&q=covid&pageSize=20&apiKey=' + environment.newsApiKey;
   constructor(private http: HttpClient) { }
 
   getCovid19Data() {
@@ -20,15 +18,17 @@ export class CovidDataService {
     return this.http.get(endpoint).toPromise();
   }
 
-  getCoronaData() {
-    return this.http.get(this.coronaUrl).toPromise();
+  getCoronaData(country?: string) {
+    let endpoint = '';
+    if(country) {
+      endpoint = this.coronaUrl + '/' + country;
+    } else {
+      endpoint = this.coronaUrl;
+    }
+    return this.http.get(endpoint).toPromise();
   }
 
   getWorldData() {
     return this.http.get(this.worldUrl).toPromise();
-  }
-
-  getBbcNewsData() {
-    return this.http.get(this.bbcNewsUrl).toPromise();
   }
 }
