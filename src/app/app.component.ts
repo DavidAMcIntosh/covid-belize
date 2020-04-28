@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import { CovidDataService } from './covid-data.service';
 import { TimelineElement } from './timeline.interface';
-import { Covid19ApiResponse, CoronaApiResponse, WorldApiResponse, BbcNewsApiResponse, Article } from './apis.interface';
+import { Covid19ApiResponse, CoronaApiResponse, WorldApiResponse } from './apis.interface';
 import * as moment from 'moment';
 import { NgProgress, NgProgressRef } from 'ngx-progressbar';
+import { ChartType, ChartOptions } from 'chart.js';
+import { SingleDataSet, Label } from 'ng2-charts';
 
 @Component({
   selector: 'app-root',
@@ -36,9 +38,25 @@ export class AppComponent {
   //loading
   loading: boolean = true;
 
-  //news
-  newsToDisplay: Article = <Article>{};
+  //country comparison
+  country: string;
 
+  // Charts
+  public belizeChartLabels: Label[] = ['Active Cases', 'Deaths', 'Recoveries'];
+  public belizeChartData: SingleDataSet = [];
+  public belizeChartType: ChartType = 'doughnut';
+  public belizeChartOptions: (ChartOptions) = {
+    responsive: true,
+  };
+
+  public globalChartLabels: Label[] = ['Active Cases', 'Deaths', 'Recoveries'];
+  public globalChartData: SingleDataSet = [];
+  public globalChartType: ChartType = 'doughnut';
+  public globalChartOptions: (ChartOptions) = {
+    responsive: true,
+  };
+
+  // Progress Bar
   options = {
     min: 8,
     max: 100,
@@ -57,6 +75,10 @@ export class AppComponent {
   completedClass = false;
   preventAbuse = false;
   progressRef: NgProgressRef;
+
+  // Country being used for comparison
+  countryData: CoronaApiResponse;
+  belizeData: CoronaApiResponse;
 
   constructor(private covidService: CovidDataService, private progress: NgProgress) { }
 
@@ -83,67 +105,69 @@ export class AppComponent {
     if (covid19Response) {
       this.timelineData = covid19Response;
       let lastIndex = covid19Response.length - 1;
-        this.cases = covid19Response[lastIndex].Confirmed;
-        this.deaths = covid19Response[lastIndex].Deaths;
-        this.recoveries = covid19Response[lastIndex].Recovered;
+      this.cases = covid19Response[lastIndex].Confirmed;
+      this.deaths = covid19Response[lastIndex].Deaths;
+      this.recoveries = covid19Response[lastIndex].Recovered;
 
-        let lastCase: string = '';
-        let lastDeath: string = '';
+      let lastCase: string = '';
+      let lastDeath: string = '';
 
-        for (let i = covid19Response.length - 1; i >= 0; i--) {
-          if (covid19Response[i].Confirmed < this.cases) {
-            lastCase = covid19Response[i].Date;
-            break;
-          }
+      for (let i = covid19Response.length - 1; i >= 0; i--) {
+        if (covid19Response[i].Confirmed < this.cases) {
+          lastCase = covid19Response[i].Date;
+          break;
         }
-        for (let i = covid19Response.length - 1; i >= 0; i--) {
-          if (covid19Response[i].Deaths < this.deaths) {
-            lastDeath = covid19Response[i].Date;
-            break;
-          }
+      }
+      for (let i = covid19Response.length - 1; i >= 0; i--) {
+        if (covid19Response[i].Deaths < this.deaths) {
+          lastDeath = covid19Response[i].Date;
+          break;
         }
-        this.daysSinceLastCase = moment(lastCase).from(moment());
-        this.daysSinceLastDeath = moment(lastDeath).from(moment());
-        let coronaResponse: CoronaApiResponse = await this.getCoronaData();
-        if (coronaResponse) {
-          this.active = coronaResponse.active;
-          this.critical = coronaResponse.critical;
-          this.tests = coronaResponse.tests;
-          this.casesPerOneMillion = coronaResponse.casesPerOneMillion;
-          this.deathsPerOneMillion = coronaResponse.deathsPerOneMillion;
-          this.testsPerOneMillion = coronaResponse.testsPerOneMillion;
-          this.todayCases = coronaResponse.todayCases;
-          this.todayDeaths = coronaResponse.todayDeaths;
+      }
+      this.daysSinceLastCase = moment(lastCase).from(moment());
+      this.daysSinceLastDeath = moment(lastDeath).from(moment());
+      let coronaResponse: Array<CoronaApiResponse> = await this.getCoronaData();
+      if (coronaResponse) {
 
-          let worldResponse: WorldApiResponse = await this.getWorldData();
-          if (worldResponse) {
-            this.totalConfirmed = worldResponse.TotalConfirmed;
-            this.totalDeaths = worldResponse.TotalDeaths;
-            this.totalRecovered = worldResponse.TotalRecovered;
-          
-            let bbcNewsResponse: BbcNewsApiResponse = await this.getBbcNewsData();
-            if (bbcNewsResponse) {
-              let newsIndex = Math.floor(Math.random() * (19 - 0 + 1) + 0);
-              this.newsToDisplay = bbcNewsResponse.articles[newsIndex];
-              this.prepareTimeline();
-              this.progressRef.complete();
-              this.loading = false;
-            }
-          }
+        this.belizeData = coronaResponse.find(o => o.country === 'Belize');
+        this.active = this.belizeData.active;
+        this.critical = this.belizeData.critical;
+        this.tests = this.belizeData.tests;
+        this.casesPerOneMillion = this.belizeData.casesPerOneMillion;
+        this.deathsPerOneMillion = this.belizeData.deathsPerOneMillion;
+        this.testsPerOneMillion = this.belizeData.testsPerOneMillion;
+        this.todayCases = this.belizeData.todayCases;
+        this.todayDeaths = this.belizeData.todayDeaths;
+
+        //populate the belizean chart
+        this.belizeChartData = [this.active, this.deaths, this.recoveries];
+        this.countryData = coronaResponse.find(o => o.country === 'USA');
+        //populate the global chart
+        this.globalChartData = [this.countryData.active, this.countryData.deaths, this.countryData.recovered];
+
+        let worldResponse: WorldApiResponse = await this.getWorldData();
+        if (worldResponse) {
+          this.totalConfirmed = worldResponse.TotalConfirmed;
+          this.totalDeaths = worldResponse.TotalDeaths;
+          this.totalRecovered = worldResponse.TotalRecovered;
+          this.prepareTimeline();
+          this.progressRef.complete();
+          this.loading = false;
         }
+      }
     }
-  }
-
-  getBbcNewsData(): Promise<any> {
-    return this.covidService.getBbcNewsData();
   }
 
   getCovid19Data(): Promise<any> {
     return this.covidService.getCovid19Data();
   }
 
-  getCoronaData(): Promise<any> {
-    return this.covidService.getCoronaData();
+  getCoronaData(country?: string): Promise<any> {
+    if (country) {
+      return this.covidService.getCoronaData(country);
+    } else {
+      return this.covidService.getCoronaData();
+    }
   }
 
   getWorldData(): Promise<any> {
@@ -154,20 +178,20 @@ export class AppComponent {
     let confirmed = 0;
     let deaths = 0;
     let recoveries = 0;
-    for(let i=0; i < this.timelineData.length; i++) {
+    for (let i = 0; i < this.timelineData.length; i++) {
       let isConfirmedChange: boolean = false;;
       let isDeathsChange: boolean = false;
       let isRecoveriesChange: boolean = false;
-      if(this.timelineData[i].Confirmed > confirmed) {
+      if (this.timelineData[i].Confirmed > confirmed) {
         isConfirmedChange = true;
       }
-      if(this.timelineData[i].Deaths > deaths) {
+      if (this.timelineData[i].Deaths > deaths) {
         isDeathsChange = true;
       }
-      if(this.timelineData[i].Recovered > recoveries) {
+      if (this.timelineData[i].Recovered > recoveries) {
         isRecoveriesChange = true;
       }
-      if(isConfirmedChange || isDeathsChange || isRecoveriesChange) {
+      if (isConfirmedChange || isDeathsChange || isRecoveriesChange) {
         this.timelineElements.push({
           date: new Date(moment(this.timelineData[i].Date).format('YYYY-MM-DD')),
           newCases: (this.timelineData[i].Confirmed - confirmed),
@@ -186,6 +210,6 @@ export class AppComponent {
 
   numberWithCommas(x): string {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
+  }
 
 }

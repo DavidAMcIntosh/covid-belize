@@ -8,6 +8,9 @@ import { MatListModule } from '@angular/material/list';
 import { MatTabsModule } from '@angular/material/tabs';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatBadgeModule } from '@angular/material/badge';
 
 // for http web service calls
 import { HttpClientModule } from '@angular/common/http';
@@ -25,6 +28,12 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
 // Custom progress bar
 import { NgProgressModule } from 'ngx-progressbar';
 
+// Charts
+import { ChartsModule } from 'ng2-charts';
+
+// Countdown
+import { CountdownModule } from 'ngx-countdown';
+
 @NgModule({
   declarations: [
     AppComponent
@@ -41,7 +50,12 @@ import { NgProgressModule } from 'ngx-progressbar';
     FlexLayoutModule,
     NgScrollbarModule,
     NgProgressModule,
-    MatButtonModule
+    MatButtonModule,
+    ChartsModule,
+    MatExpansionModule,
+    MatFormFieldModule,
+    CountdownModule,
+    MatBadgeModule
   ],
   providers: [CovidDataService],
   bootstrap: [AppComponent]

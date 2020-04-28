@@ -1,140 +1,202 @@
-<ng-scrollbar visibility="always">
+<ng-scrollbar visibility="always" track="all">
   <ng-progress [color]="'black'" id="myProgress"></ng-progress>
   <mat-toolbar color="primary">
     <mat-toolbar-row><span class="center-span">{{title}}</span></mat-toolbar-row>
   </mat-toolbar>
   <mat-tab-group mat-align-tabs="center">
-    <mat-tab label="Information">
-      <div class="container" *ngIf="!loading">
-        <div class="flex-container" fxLayoutGap="0px" fxLayout="row" fxLayout.lt-md="column">
-          <mat-card class="main-cards" fxFlex="25">
-            <mat-card-title heading>
-              Latest Updates (Belize)
-            </mat-card-title>
-            <mat-card-content>
-              <mat-list>
-                <mat-list-item>
-                  <p body-1>
-                    Reported Cases: {{numberWithCommas(cases)}}
-                  </p>
-                </mat-list-item>
-                <mat-list-item>
-                  <p body-1>
-                    Active Cases: {{numberWithCommas(active)}}
-                  </p>
-                </mat-list-item>
-                <mat-list-item>
-                  <p body-1>
-                    Critical Cases: {{numberWithCommas(critical)}}
-                  </p>
-                </mat-list-item>
-                <mat-list-item>
-                  <p body-1>
-                    Deaths: {{numberWithCommas(deaths)}}
-                  </p>
-                </mat-list-item>
-                <mat-list-item>
-                  <p body-1>
-                    Recoveries: {{numberWithCommas(recoveries)}}
-                  </p>
-                </mat-list-item>
-                <mat-list-item>
-                  <p body-1>
-                    Cases Today: {{numberWithCommas(todayCases)}}
-                  </p>
-                </mat-list-item>
-                <mat-list-item>
-                  <p body-1>
-                    Deaths Today: {{numberWithCommas(todayDeaths)}}
-                  </p>
-                </mat-list-item>
-                <mat-list-item>
-                  <p body-1>
-                    Tests Performed: {{numberWithCommas(tests)}}
-                  </p>
-                </mat-list-item>
-                <mat-list-item>
-                  <p body-1> Last Case: {{numberWithCommas(daysSinceLastCase)}}</p>
-                </mat-list-item>
-                <mat-list-item>
-                  <p body-1> Last Death: {{numberWithCommas(daysSinceLastDeath)}}</p>
-                </mat-list-item>
-              </mat-list>
-            </mat-card-content>
-          </mat-card>
-          <mat-card class="main-cards" fxFlex="25">
-            <mat-card-title heading>Data Projections (Belize)</mat-card-title>
-            <mat-card-content>
-              <mat-list>
-                <mat-list-item>
-                  <p body-1>
-                    Cases Per One Million People: {{numberWithCommas(casesPerOneMillion)}}
-                  </p>
-                </mat-list-item>
-                <mat-list-item>
-                  <p body-1>
-                    Deaths Per One Million People: {{numberWithCommas(deathsPerOneMillion)}}
-                  </p>
-                </mat-list-item>
-                <mat-list-item>
-                  <p body-1>
-                    Tests Per One Million People: {{numberWithCommas(testsPerOneMillion)}}
-                  </p>
-                </mat-list-item>
-              </mat-list>
-              <br>
-              <mat-card-title heading>Global Stats</mat-card-title>
-              <mat-list>
-                <mat-list-item>
-                  <p body-1>
-                    Total Confirmed: {{numberWithCommas(totalConfirmed)}}
-                  </p>
-                </mat-list-item>
-                <mat-list-item>
-                  <p body-1>
-                    Total Deaths: {{numberWithCommas(totalDeaths)}}
-                  </p>
-                </mat-list-item>
-                <mat-list-item>
-                  <p body-1>
-                    Total Recovered: {{numberWithCommas(totalRecovered)}}
-                  </p>
-                </mat-list-item>
-              </mat-list>
-            </mat-card-content>
-          </mat-card>
-          <mat-divider [vertical]="true"></mat-divider>
-          <mat-card class="main-cards" fxFlex="50">
-            <mat-card-content>
-                <mat-card class="news-card mat-elevation-z8">
-                  <mat-card-header>
-                    <mat-card-title>{{newsToDisplay.title}}</mat-card-title>
-                    <mat-card-subtitle>{{newsToDisplay.author}}</mat-card-subtitle>
-                  </mat-card-header>
-                  <img mat-card-image src={{newsToDisplay.urlToImage}}>
-                  <mat-card-content>
-                    <p>
-                      {{newsToDisplay.description}}
-                    </p>
-                  </mat-card-content>
-                  <mat-card-actions>
-                    <a mat-button href="{{newsToDisplay.url}}" target="_blank">READ MORE</a>
-                  </mat-card-actions>
-                </mat-card>
-            </mat-card-content>
-          </mat-card>
-        </div>
+    <mat-tab label="Stats 📊">
+      <div class="flex-container" fxLayoutGap="0px" fxLayout="row" fxLayout.lt-md="column" *ngIf="!loading">
+        <mat-card class="main-cards" fxFlex="50">
+          <mat-card-title heading>BZE Case Overview</mat-card-title>
+          <mat-card-content>
+            <div class="card-flex-container">
+              <div class="card-inner-container">
+                <canvas baseChart height="350" width="350" [data]="belizeChartData" [labels]="belizeChartLabels"
+                  [options]="belizeChartOptions" [chartType]="belizeChartType">
+                </canvas>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+        <mat-divider [vertical]="true"></mat-divider>
+        <mat-card class="main-cards" fxFlex="50">
+          <mat-card-title heading>USA Case Overview</mat-card-title>
+          <mat-card-content>
+            <div class="card-flex-container">
+              <div class="card-inner-container">
+                <canvas baseChart height="350" width="350" [data]="globalChartData" [labels]="globalChartLabels"
+                  [options]="globalChartOptions" [chartType]="globalChartType">
+                </canvas>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <div class="flex-container" fxLayoutGap="0px" fxLayout="row" fxLayout.lt-md="column" *ngIf="!loading">
+        <mat-accordion fxFlex="100">
+          <mat-expansion-panel color="primary">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Belize
+              </mat-panel-title>
+              <mat-panel-description>
+                Click to view data
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <mat-list>
+              <mat-list-item>
+                <p body-1><strong>
+                    Reported Cases:</strong> {{numberWithCommas(cases)}}
+                </p>
+              </mat-list-item>
+              <mat-list-item>
+                <p body-1><strong>
+                    Active Cases:</strong> {{numberWithCommas(active)}}
+                </p>
+              </mat-list-item>
+              <mat-list-item>
+                <p body-1><strong>
+                    Critical Cases:</strong> {{numberWithCommas(critical)}}
+                </p>
+              </mat-list-item>
+              <mat-list-item>
+                <p body-1><strong>
+                    Deaths:</strong> {{numberWithCommas(deaths)}}
+                </p>
+              </mat-list-item>
+              <mat-list-item>
+                <p body-1><strong>
+                    Recoveries:</strong> {{numberWithCommas(recoveries)}}
+                </p>
+              </mat-list-item>
+              <mat-list-item>
+                <p body-1><strong>
+                    Cases Today:</strong> {{numberWithCommas(todayCases)}}
+                </p>
+              </mat-list-item>
+              <mat-list-item>
+                <p body-1><strong>
+                    Deaths Today:</strong> {{numberWithCommas(todayDeaths)}}
+                </p>
+              </mat-list-item>
+              <mat-list-item>
+                <p body-1><strong>
+                    Tests Performed:</strong> {{numberWithCommas(tests)}}
+                </p>
+              </mat-list-item>
+              <mat-list-item>
+                <p body-1><strong> Cases Per One Million:</strong> {{numberWithCommas(casesPerOneMillion)}}</p>
+              </mat-list-item>
+              <mat-list-item>
+                <p body-1><strong> Deaths Per One Million:</strong> {{numberWithCommas(deathsPerOneMillion)}}</p>
+              </mat-list-item>
+              <mat-list-item>
+                <p body-1><strong> Tests Per One Million:</strong> {{numberWithCommas(testsPerOneMillion)}}</p>
+              </mat-list-item>
+            </mat-list>
+          </mat-expansion-panel>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                USA
+              </mat-panel-title>
+              <mat-panel-description>
+                Click to view data
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <mat-list>
+              <mat-list-item>
+                <p body-1><strong>
+                    Reported Cases:</strong> {{numberWithCommas(countryData.cases)}}
+                </p>
+              </mat-list-item>
+              <mat-list-item>
+                <p body-1><strong>
+                    Active Cases:</strong> {{numberWithCommas(countryData.active)}}
+                </p>
+              </mat-list-item>
+              <mat-list-item>
+                <p body-1><strong>
+                    Critical Cases:</strong> {{numberWithCommas(countryData.critical)}}
+                </p>
+              </mat-list-item>
+              <mat-list-item>
+                <p body-1><strong>
+                    Deaths:</strong> {{numberWithCommas(countryData.deaths)}}
+                </p>
+              </mat-list-item>
+              <mat-list-item>
+                <p body-1><strong>
+                    Recoveries:</strong> {{numberWithCommas(countryData.recovered)}}
+                </p>
+              </mat-list-item>
+              <mat-list-item>
+                <p body-1><strong>
+                    Cases Today:</strong> {{numberWithCommas(countryData.todayCases)}}
+                </p>
+              </mat-list-item>
+              <mat-list-item>
+                <p body-1><strong>
+                    Deaths Today:</strong> {{numberWithCommas(countryData.todayDeaths)}}
+                </p>
+              </mat-list-item>
+              <mat-list-item>
+                <p body-1><strong>
+                    Tests Performed:</strong> {{numberWithCommas(countryData.tests)}}
+                </p>
+              </mat-list-item>
+              <mat-list-item>
+                <p body-1><strong> Cases Per One Million:</strong>
+                  {{numberWithCommas(countryData.casesPerOneMillion)}}</p>
+              </mat-list-item>
+              <mat-list-item>
+                <p body-1><strong> Deaths Per One Million:</strong>
+                  {{numberWithCommas(countryData.deathsPerOneMillion)}}</p>
+              </mat-list-item>
+              <mat-list-item>
+                <p body-1><strong> Tests Per One Million:</strong>
+                  {{numberWithCommas(countryData.testsPerOneMillion)}}</p>
+              </mat-list-item>
+            </mat-list>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+      <div class="flex-container" fxLayoutGap="0px" fxLayout="row" fxLayout.lt-md="column" *ngIf="!loading">
+        <mat-card class="main-cards" fxFlex="33.3">
+          <mat-card-title heading>Keep Track 📆</mat-card-title>
+          <mat-card-content>
+            <p><strong>Last reported case:</strong> {{daysSinceLastCase}} 😃</p>
+            <p><strong>Last reported death:</strong> {{daysSinceLastDeath}} 🙂</p>
+          </mat-card-content>
+        </mat-card>
+        <mat-card class="main-cards" fxFlex="33.3">
+          <mat-card-title heading>Global Numbers 🌎</mat-card-title>
+          <mat-card-content>
+            <p><strong>Total confirmed:</strong> {{numberWithCommas(totalConfirmed)}} ❕</p>
+            <p><strong>Total deaths:</strong> {{numberWithCommas(totalDeaths)}} 🖤</p>
+            <p><strong>Total recovered:</strong> {{numberWithCommas(totalRecovered)}} 🎉</p>
+          </mat-card-content>
+        </mat-card>
+        <mat-card class="main-cards" fxFlex="33.3">
+          <mat-card-title heading>Important Info 📢</mat-card-title>
+          <mat-card-content>
+            <p><strong>Help Hotline:</strong> 0-800-MOH-CARE ☎️ </p>
+            <p><strong>Latest Statutory Instrument:</strong><a mat-button color="primary" target="_blank" href="https://www.pressoffice.gov.bz/wp-content/uploads/2019/12/SI-No-62-of-2020-Belize-Constitution-Emergency-Powers-Regulations-2020-.pdf">View</a> 📜</p>
+          </mat-card-content>
+        </mat-card>
       </div>
     </mat-tab>
-    <mat-tab label="Timeline">
+    <mat-tab label="Timeline 📅">
       <!-- Add the timeline -->
-      <vertical-timeline>
+      <vertical-timeline *ngIf="!loading">
         <!-- If no value is passed for the date, the current time is used. -->
         <vertical-timeline-card [dateValue]="timelineElement.date" [timeString]="' '"
           *ngFor="let timelineElement of timelineElements">
-          <h1 *ngIf="timelineElement.newCase">+{{timelineElement.newCases}} New Cases</h1>
-          <h1 *ngIf="timelineElement.newDeaths">+{{timelineElement.newDeaths}} New Deaths</h1>
-          <h1 *ngIf="timelineElement.newRecovered">+{{timelineElement.newRecovered}} New Recoveries</h1>
+          <br>
+          <p>There were {{timelineElement.newCases}} new cases 📈,
+            {{timelineElement.newDeaths}}  new deaths  🖤, and
+            {{timelineElement.newRecovered}} new recoveries 📉. 
+          </p>
         </vertical-timeline-card>
       </vertical-timeline>
     </mat-tab>

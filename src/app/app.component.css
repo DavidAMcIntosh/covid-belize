@@ -1,9 +1,19 @@
 .main-cards {
     box-shadow: none !important;
     border-radius: 0;
+    text-align: center;
 }
 
 .center-span {
     flex: 1 1 auto;
     text-align: center;
 }
+
+.card-flex-container {
+    display: flex;
+  }
+
+  .card-inner-container {
+    display:inline-block;
+    margin: 0 auto;
+  }
