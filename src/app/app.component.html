@@ -20,7 +20,7 @@
         </mat-card>
         <mat-divider [vertical]="true"></mat-divider>
         <mat-card class="main-cards" fxFlex="50">
-          <mat-card-title heading>USA Case Overview</mat-card-title>
+          <mat-card-title heading>{{countryData.country}} Case Overview</mat-card-title>
           <mat-card-content>
             <div class="card-flex-container">
               <div class="card-inner-container">
@@ -30,6 +30,13 @@
               </div>
             </div>
           </mat-card-content>
+          <mat-card-actions>
+            <mat-select style="width: 50%;"placeholder="Change Country" [(ngModel)]="selectedCountry" (ngModelChange)="onCountryChange()">
+              <mat-option *ngFor="let country of countryDropdown" [value]="country.value" >
+                {{country.viewValue}}
+              </mat-option>
+            </mat-select>
+          </mat-card-actions>
         </mat-card>
       </div>
       <div class="flex-container" fxLayoutGap="0px" fxLayout="row" fxLayout.lt-md="column" *ngIf="!loading">
@@ -98,7 +105,7 @@
           <mat-expansion-panel>
             <mat-expansion-panel-header>
               <mat-panel-title>
-                USA
+                {{countryData.country}}
               </mat-panel-title>
               <mat-panel-description>
                 Click to view data
@@ -181,7 +188,7 @@
           <mat-card-title heading>Important Info 📢</mat-card-title>
           <mat-card-content>
             <p><strong>Help Hotline:</strong> 0-800-MOH-CARE ☎️ </p>
-            <p><strong>Latest Statutory Instrument:</strong><a mat-button color="primary" target="_blank" href="https://www.pressoffice.gov.bz/wp-content/uploads/2019/12/SI-No-62-of-2020-Belize-Constitution-Emergency-Powers-Regulations-2020-.pdf">View</a> 📜</p>
+            <p><strong>Latest Statutory Instrument:</strong><a mat-button color="primary" target="_blank" href="https://www.pressoffice.gov.bz/wp-content/uploads/2019/12/SI-No-65-of-2020-Belize-Constitution-1.pdf">View</a> 📜</p>
           </mat-card-content>
         </mat-card>
       </div>

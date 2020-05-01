@@ -79,6 +79,9 @@ export class AppComponent {
   // Country being used for comparison
   countryData: CoronaApiResponse;
   belizeData: CoronaApiResponse;
+  countries: Array<CoronaApiResponse> = [];
+  selectedCountry: string;
+  countryDropdown = [];
 
   constructor(private covidService: CovidDataService, private progress: NgProgress) { }
 
@@ -126,10 +129,17 @@ export class AppComponent {
       }
       this.daysSinceLastCase = moment(lastCase).from(moment());
       this.daysSinceLastDeath = moment(lastDeath).from(moment());
-      let coronaResponse: Array<CoronaApiResponse> = await this.getCoronaData();
-      if (coronaResponse) {
-
-        this.belizeData = coronaResponse.find(o => o.country === 'Belize');
+      this.countries = await this.getCoronaData();
+      if (this.countries) {
+        this.countries.forEach((country) => {
+          if(country.country !== 'Belize') {
+            this.countryDropdown.push({
+              value: country.country,
+              viewValue: country.country
+            })
+          }
+        });
+        this.belizeData = this.countries.find(o => o.country === 'Belize');
         this.active = this.belizeData.active;
         this.critical = this.belizeData.critical;
         this.tests = this.belizeData.tests;
@@ -141,7 +151,7 @@ export class AppComponent {
 
         //populate the belizean chart
         this.belizeChartData = [this.active, this.deaths, this.recoveries];
-        this.countryData = coronaResponse.find(o => o.country === 'USA');
+        this.countryData = this.countries.find(o => o.country === 'USA');
         //populate the global chart
         this.globalChartData = [this.countryData.active, this.countryData.deaths, this.countryData.recovered];
 
@@ -210,6 +220,13 @@ export class AppComponent {
 
   numberWithCommas(x): string {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+  onCountryChange() {
+    this.countryData = this.countries.find(o => o.country === this.selectedCountry);
+    //populate the global chart
+    this.globalChartData = [this.countryData.active, this.countryData.deaths, this.countryData.recovered];
+
   }
 
 }

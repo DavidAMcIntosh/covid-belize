@@ -1,5 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+
 
 // angular-material imports
 import { MatCardModule } from '@angular/material/card';
@@ -11,6 +13,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatSelectModule } from '@angular/material/select';
 
 // for http web service calls
 import { HttpClientModule } from '@angular/common/http';
@@ -55,7 +58,9 @@ import { CountdownModule } from 'ngx-countdown';
     MatExpansionModule,
     MatFormFieldModule,
     CountdownModule,
-    MatBadgeModule
+    MatBadgeModule,
+    MatSelectModule,
+    FormsModule
   ],
   providers: [CovidDataService],
   bootstrap: [AppComponent]
