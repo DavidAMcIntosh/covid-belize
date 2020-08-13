@@ -7,14 +7,13 @@ import * as moment from 'moment';
 })
 export class CovidDataService {
 
-  covid19Url = 'https://api.covid19api.com/country/belize?from=2020-01-22T00:00:00Z&to=';
+  covid19Url = 'https://api.covid19api.com/country/belize';
   coronaUrl = 'https://corona.lmao.ninja/v2/countries';
   worldUrl = 'https://api.covid19api.com/world/total';
   constructor(private http: HttpClient) { }
 
   getCovid19Data() {
-    let currentDate = moment().format();
-    let endpoint = this.covid19Url + currentDate;
+    let endpoint = this.covid19Url;
     return this.http.get(endpoint).toPromise();
   }
 
